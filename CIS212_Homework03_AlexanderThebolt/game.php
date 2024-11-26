@@ -22,7 +22,7 @@
 
     <script src="game.js" type="text/javascript"></script>
 </head>
-<body class="bg-dark">
+<body class="bg-dark" onload="initHighScoresPage()">
     <div class="container mt-5">
         <div class="row" style="align-content:center;height:70vh">
             <div class="col"></div>

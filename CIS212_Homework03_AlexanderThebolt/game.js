@@ -70,3 +70,9 @@ function timeUp()
     document.getElementById("txt_game_total").setAttribute("value",count);
     document.getElementById("txt_game_cps").setAttribute("value",cps);
 }
+
+//sets the session variable to automatically sort scores by highest to lowest
+function initHighScoresPage()
+{
+    sessionStorage.setItem("sort","high");
+}
