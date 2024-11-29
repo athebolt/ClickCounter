@@ -8,6 +8,9 @@
         //there is a bad connection, disconnect
         exit("bad connection" . $conn->connect_error);
     }
+
+    //THIS PAGE IS BY FAR THE MOST COMPLICATED
+    #i also learned that hashtags can be comments too
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +35,7 @@
                     <div class="col">
                         <!-- This form is how I determine the sort query for the score sorting. Default is highest first. -->
                         <form action="scores.php" method="post"><input type="hidden" id="txt_scores_page" name="page"><input type="hidden" id="txt_scores_sort" name="sortBy"><button type="submit" hidden id="btn_scores_sortBy">Submit sort</button></form>
+                        <!-- This is the selection of sort options for the scores. -->
                         <div class="dropdown dropend">
                             <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">Sort By</button>
                             <ul class="dropdown-menu">
@@ -40,13 +44,21 @@
                                 <li><button class="dropdown-item" onclick="sortBy('today')">Today</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <?php
+                                    //this is how the users are placed in the "sort by" dropdown
+
+                                    //select query
                                     $sql = "SELECT uname FROM users;";
 
+                                    //run it
                                     $results = $conn->query($sql);
 
+                                    //count is for unique id creation for the user list options
                                     $count = 0;
+
+                                    //while there is a row in the results
                                     while($row = $results->fetch_assoc())
                                     {
+                                        //add user sort button
                                         echo "<li><button id='btn_scores_user" . ++$count . "' class='dropdown-item' onclick='sortByUser(" . $count . ")'>" . $row["uname"] . "</button></li>";
                                     }
                                 ?>
@@ -96,7 +108,7 @@
                     //run query
                     $results = $conn->query($sql);
 
-                    //check if query has rows
+                    //check if query has rows, this is the only time there is a valid chance for the query to not have rows
                     if($results->num_rows > 0)
                     {
                         //setup table heading
@@ -111,14 +123,14 @@
                                     </tr>
                                 </thead>
                         <tbody>";
-                        
-                        $pageNumber = 1;
 
                         //find the page we are on
                         if(isset($_POST["page"]) && !empty($_POST["page"]))
                         {
-                            echo "<script>console.log('test');</script>";
+                            //testing
+                            //echo "<script>console.log('test');</script>";
 
+                            //page number passed from post is stored page number
                             $pageNumber = $_POST["page"];
 
                             //determines how many rows in the query we skip if not on first page
@@ -139,7 +151,7 @@
                         }
 
                         //for testing, what page we are on
-                        echo "<script>console.log('". $pageNumber . " page number" . "');</script>";
+                        //echo "<script>console.log('". $pageNumber . " page number" . "');</script>";
 
                         //display the table rows
                         $count = 1;
@@ -166,11 +178,19 @@
                         //end table element tags
                         echo   "</tbody></table>";
 
-                        //if there are more than 5 rows, display page numbers below the table
+                        //if there are more than 5 rows in the results, display page numbers below the table
                         if($results->num_rows > 5)
                         {
                             //divides number of rows by 5 to get the amount of pages
                             $numPages = intdiv($results->num_rows,5);
+
+                            //since the intdiv rounds down decimals, i add one to pages if the calculation is a decimal
+                            if($results->num_rows % 5 != 0)
+                            {
+                                $numPages++;
+                            }
+
+                            echo "<script>console.log('" . $numPages . "');</script>";
 
                             //if we are on the first page, we cant go back a page
                             if($pageNumber <= 1)
@@ -183,7 +203,7 @@
                             }
 
                             //if we are on the last page, we cannot go forward a page
-                            if($pageNumber == $numPages+1)
+                            if($pageNumber == $numPages)
                             {
                                 $disabledNext = "disabled";
                             }
@@ -197,9 +217,18 @@
                             echo "<li class='page-item'><button class='page-link " . $disabledPrev . "' onclick='setPage(" . ($pageNumber - 1) . ")'>Previous</button></li>";
 
                             //determines how many page numbers to display
-                            for($i = 1; $i < $numPages + 2; $i++)
+                            for($i = 1; $i <= $numPages; $i++)
                             {
-                                echo "<li class='page-item'><button class='page-link' onclick='setPage(" . $i . ")'>" . $i . "</button></li>";
+                                if($i == $pageNumber)
+                                {
+                                    $class = "page-link active";
+                                }
+                                else
+                                {
+                                    $class = "page-link";
+                                }
+
+                                echo "<li class='page-item'><button class='" . $class . "' onclick='setPage(" . $i . ")'>" . $i . "</button></li>";
                             }
 
                             //next page tag and end page number tag

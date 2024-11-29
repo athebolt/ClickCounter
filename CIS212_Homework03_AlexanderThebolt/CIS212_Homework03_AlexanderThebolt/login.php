@@ -21,22 +21,27 @@
     //if something is being posted to the server (the form info)
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
+        //testing
         //echo "<h1 class='text-light'>login button pressed</h1>";
 
         //get all users
         $sql = "SELECT * FROM users;";
 
+        //run query
         $result = $conn->query($sql);
 
         //if there are users
         if($result->num_rows > 0)
         {
+            //testing
             //echo "<h1 class='text-light'>grabbed users</h1>";
 
-            //for each user
+            //while there is a row in results
             while($row = $result->fetch_assoc())
             {
-                //check if the posted username exists in the table
+                //i put the username and password checks in different if statements to possibly reduce exploit possibilities
+
+                //check if the posted username exists in the db table
                 if($row['uname'] == $_POST['txt_login_uname'])
                 {
                     //echo "<h1 class='text-light'>username found</h1>";
@@ -46,13 +51,13 @@
                     {
                         //echo "<h1 class='text-light'>passwords match</h1>";
 
-                        //set logged in user using session variables
+                        //set logged in user using a PHP session variable
                         $_SESSION["uname"] = $row['uname'];
     
                         //move to the game
                         header('Location: game.php');
 
-                        //close connection
+                        //close connection? idk if i have to do this or not
                         $conn->close();
                     }
                 }
@@ -80,10 +85,10 @@
                     <div class="mb-3 mt-3">
                         <p class="text-center">Login</p>
                         <?php 
-                            //if we made it here and we are posting, then the info is invalid
+                            //this code should not be called if we are posting valid info because valid info redirects the page
                             if($_SERVER["REQUEST_METHOD"] == "POST")
                             {
-                                //alert message varies depending on if the boxes are filled or not
+                                //alert error message varies depending on if the boxes are filled or not
                                 if(empty($_POST["txt_login_uname"]) || empty($_POST["txt_login_password"]))
                                 {
                                     echo "<div class='alert alert-danger text-center'>Please fill both fields.</div>";

@@ -12,16 +12,19 @@ function startGame()
 
     document.getElementById("p_game_hs").style.visibility = "hidden";
 
+    //testing
     //console.log("Clicked");
 
     count = counter.innerText = 1;
 
     counter.setAttribute("onclick", "countClick()");
 
+    //i like timeout more because it only runs once
     setTimeout(timeUp, 5000);
 
     document.getElementById("p_game_timer").innerText = time;
 
+    //i use interval to show the timer counting down
     interval = setInterval(timer, 1000);
 }
 
@@ -46,8 +49,10 @@ function countClick()
 //stop timer and clicking, store info
 function timeUp()
 {
+    //stop timer countdown
     clearInterval(interval);
 
+    //calculate clicks per second
     var cps = count/5;
 
     document.getElementById("btn_game_counter").setAttribute("onclick", "");

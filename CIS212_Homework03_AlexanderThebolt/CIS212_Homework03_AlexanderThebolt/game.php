@@ -22,6 +22,7 @@
 
     <script src="game.js" type="text/javascript"></script>
 </head>
+<!--initHighScoresPage does what it says, it sets the default sort of scores to high scores using a js session variable-->
 <body class="bg-dark" onload="initHighScoresPage()">
     <div class="container mt-5">
         <div class="row" style="align-content:center;height:70vh">
@@ -30,20 +31,27 @@
                 <h1 class="pb-3">Click Counter</h1>
 
                 <?php
+                    //if the submit button was pressed, submit the score
                     if(isset($_POST["btn_game_sub"]))
                     {
+                        //insert into scores (uname,total,cps,date) values ('uname','total','cps','date');
                         $sql = "INSERT INTO scores (uname,total,cps,date)
                         VALUES ('" . $_SESSION["uname"] . "','" . $_POST["txt_game_total"] . "','" . $_POST["txt_game_cps"] . "','" . date("Y-m-d") . "');";
 
+                        //sometimes the date is incorrect, im not sure why it does that
+
+                        //testing
                         //echo "<div class='alert alert-success text-center'>" . $sql . "</div>";
 
+                        //if the query run is successful,
                         if($conn->query($sql) == true)
                         {
-                            //score saved
+                            //tell the user that the score submission is successful
                             echo "<div class='alert alert-success alert-dismissible text-center'><button type='button' class='btn-close' data-bs-dismiss='alert'></button>Score submitted successfully!</div>";
                         }
                         else
                         {
+                            //tell the user that the score submission is unsuccessful
                             echo "<div class='alert alert-danger alert-dismissible text-center'><button type='button' class='btn-close' data-bs-dismiss='alert'></button>SERVER ERROR.</div>";
                         }
                     }

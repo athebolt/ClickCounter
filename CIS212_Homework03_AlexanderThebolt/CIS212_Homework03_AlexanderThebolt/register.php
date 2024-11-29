@@ -32,13 +32,16 @@
                             //if something is being posted to the server (the form info)
                             if($_SERVER["REQUEST_METHOD"] == "POST")
                             {
+                                //testing
                                 //echo "<h1 class='text-light'>register button pressed</h1>";
                             
                                 //get all users
                                 $sql = "SELECT * FROM users;";
                             
+                                //run query
                                 $result = $conn->query($sql);
                             
+                                //boolean if username exists
                                 $err = false;
                             
                                 //if there are users
@@ -55,7 +58,7 @@
                                         }
                                     }
                                 
-                                    //if unique username
+                                    //if username is unique
                                     if(!$err)
                                     {
                                         //make sure fields are filled
@@ -65,32 +68,34 @@
                                             if($_POST["txt_reg_password"] == $_POST["txt_reg_conPass"])
                                             {
                                                 //good to register new user
-                                            
+                                                
+                                                //insert into users values ('uname','fname','lname',password');
                                                 $sql = "INSERT INTO users 
                                                 VALUES ('" . $_POST["txt_reg_uname"] . "','" . $_POST["txt_reg_fname"] . "','" . $_POST["txt_reg_lname"] . "','" . $_POST["txt_reg_password"] . "');";
 
+                                                //if the query ran, then the user was added to the table
                                                 if($conn->query($sql) == true)
                                                 {
-                                                    //new record created
                                                     //take user to the game page
-                                                
                                                     header('Location: game.php');
                                                 
                                                     $conn->close();
                                                 }
                                                 else
                                                 {
-                                                    //record creation failed
+                                                    //record creation failed, sometimes this happens and idk why but its nice to have the error message
                                                     echo "<div class='alert alert-danger text-center'>SERVER ERROR. Try again.</div>";
                                                 }
                                             }
                                             else
                                             {
+                                                //invalid info
                                                 echo "<div class='alert alert-danger text-center'>Passwords do not match.</div>";
                                             }
                                         }
                                         else
                                         {
+                                            //invalid info
                                             echo "<div class='alert alert-danger text-center'>Please fill all fields.</div>";
                                         }
                                     }
